@@ -1,0 +1,292 @@
+on right click:
+    if tool's name is "tool":
+        if block is not set:
+            stop
+        set {bsbsx} to clicked block's x-coord
+        set {bsbsy} to clicked block's y-coord
+        set {bsbsz} to clicked block's z-coord
+        broadcast "&22: &fx:&6%clicked block's x-coord%,&fy:&6%clicked block's y-coord%,&fz:&6%clicked block's z-coord%"
+
+
+
+
+
+
+on left click:
+    if tool's name is "tool":
+        if block is not set:
+            stop
+            
+        set {bsbs2x} to clicked block's x-coord
+        set {bsbs2y} to clicked block's y-coord
+        set {bsbs2z} to clicked block's z-coord
+        broadcast "&11: &fx:&6%clicked block's x-coord%,&fy:&6%clicked block's y-coord%,&fz:&6%clicked block's z-coord%"
+        cancel event
+
+
+
+
+
+
+command /select_Prizes_location:
+    permission: op
+    permission message: "You must be an op to change player's permissions."
+    trigger:
+        if {bsbsx},{bsbsy},{bsbsz},{bsbs2x},{bsbs2y},{bsbs2z} is not set:
+            send "pleast set blocks"
+        else:
+            set {Prizex} to {bsbsx}
+            set {Prizey} to {bsbsy}
+            set {Prizez} to {bsbsz}
+            set {Prize2x} to {bsbs2x}
+            set {Prize2y} to {bsbs2y}
+            set {Prize2z} to {bsbs2z}
+            send "done selected , Please use &6/select_Prizes_items &fand &6/select_location_Prizes_block"
+
+
+
+
+
+
+
+command /select_gate_door:
+    permission: op
+    permission message: "You must be an op to change player's permissions."
+    trigger:
+        if {bsbsx},{bsbsy},{bsbsz},{bsbs2x},{bsbs2y},{bsbs2z} is not set:
+            send "pleast set blocks"
+        else:
+            set {doorx} to {bsbsx}
+            set {doory} to {bsbsy}
+            set {doorz} to {bsbsz}
+            set {door2x} to {bsbs2x}
+            set {door2y} to {bsbs2y}
+            set {door2z} to {bsbs2z}
+            send "done selected , Please use &6/door on &for &6/door off"
+
+
+
+
+
+command /door [<string>]:
+    permission: op
+    permission message: "You must be an op to change player's permissions."
+    trigger:
+        if arg-1 is not set:
+            send "Please type &6/door on &for &6/door off"
+        arg 1 is "on":
+            set {door} to "on"
+            send "done i will set the door event on"
+        arg 1 is "off":
+            set {door} to "off"
+            send "done i will set the door event off"
+
+
+
+
+
+
+
+
+command /select_Prizes_items [<string>]:
+    permission: op
+    permission message: "You must be an op to change player's permissions."
+    trigger:
+        if player's tool is set:
+            if arg-1 is not set:
+                send "Please type &6/selectPrizes &61/2/3/4/5/6"
+            arg 1 is "1":
+                broadcast "&6Done 1"
+                set {1item} to player's tool
+            arg 1 is "2":
+                broadcast "&6Done 2"
+                set {2item} to player's tool
+            arg 1 is "3":
+                broadcast "&6Done 3"
+                set {3item} to player's tool
+            arg 1 is "4":
+                broadcast "&6Done 4"
+                set {4item} to player's tool
+            arg 1 is "5":
+                broadcast "&6Done 5"
+                set {5item} to player's tool
+            arg 1 is "6":
+                broadcast "&6Done 6"
+                set {6item} to player's tool
+        if player's tool is air:
+            broadcast "You must be holding an item to use this command."
+
+
+
+
+
+
+
+
+
+command /select_location_Prizes_block:
+    permission: op
+    permission message: "You must be an op to change player's permissions."
+    trigger:
+        if player's tool is set:
+            set {Prizesblock} to player's tool
+            broadcast "&6Done "
+        if player's tool is air:
+            broadcast "You must be holding an item to use this command."
+
+
+
+
+
+
+
+
+
+
+function checkdoor():
+    if {1checkdoor} is "off":
+        set {1checkdoor} to "on"
+        wait 1800 seconds #you can edit gate timer open
+        gateopen()
+    if {1checkdoor} is "on":
+        stop
+    if {1checkdoor} is not set:
+        set {1checkdoor} to "on"
+        wait 1800 seconds #you can edit gate timer open
+        gateopen()
+
+
+
+
+
+
+
+
+function gateclose():
+    if {doorx},{doory},{doorz},{door2x},{door2y},{door2z} is not set:
+        stop
+    else if {door} is "on":
+        wait 8 seconds #you can edit gate timer close
+        set {1checkdoor} to "off"
+        broadcast "the gate is &4close"
+        set all blocks within location({doorx},{doory},{doorz}) and location({door2x},{door2y},{door2z}) to nether brick fence
+        set {doorstast} to "off"
+    else if {door} is "off":
+        stop
+    else if {door} is not set:
+        stop
+
+
+
+
+
+
+
+
+
+
+
+function gateopen():
+    if {doorx},{doory},{doorz},{door2x},{door2y},{door2z} is not set:
+        stop
+    else if {door} is "on":
+        if {doorstast} is "on":
+            stop
+        else if {doorstast} is "off":
+            if {Prizesblock} is not set:
+                set all blocks between location({Prizex},{Prizey},{Prizez}) and location({Prizex},{Prizey},{Prizez}) to diamond block
+                broadcast "the gate is &2open"
+                set all blocks within location({doorx},{doory},{doorz}) and location({door2x},{door2y},{door2z}) to air
+                set {doorstast} to "on"
+            if {Prizesblock} is set:
+                set all blocks between location({Prizex},{Prizey},{Prizez}) and location({Prizex},{Prizey},{Prizez}) to {Prizesblock}
+                broadcast "the gate is &2open"
+                set all blocks within location({doorx},{doory},{doorz}) and location({door2x},{door2y},{door2z}) to air
+                set {doorstast} to "on"
+        else if {doorstast} is not set:
+            if {Prizesblock} is not set:
+                set all blocks between location({Prizex},{Prizey},{Prizez}) and location({Prizex},{Prizey},{Prizez}) to diamond block
+                broadcast "the gate is &2open"
+                set all blocks within location({doorx},{doory},{doorz}) and location({door2x},{door2y},{door2z}) to air
+                set {doorstast} to "on"
+            if {Prizesblock} is set:
+                set all blocks between location({Prizex},{Prizey},{Prizez}) and location({Prizex},{Prizey},{Prizez}) to {Prizesblock}
+                broadcast "the gate is &2open"
+                set all blocks within location({doorx},{doory},{doorz}) and location({door2x},{door2y},{door2z}) to air
+                set {doorstast} to "on"
+    else if {door} is "off":
+        stop
+    else if {door} is not set:
+        stop
+         
+
+
+
+
+
+
+
+
+every 1 second:
+    checkdoor()
+
+
+
+
+
+
+
+
+
+
+
+
+
+function gatePrizes(p: player):
+  set {randomIntGate} to random integer between 1 and 6
+  if {randomIntGate} = 1:
+    give {1item} to {_p}
+  if {randomIntGate} = 2:
+    give {2item} to {_p}
+  if {randomIntGate} = 3:
+    give {3item} to {_p}
+  if {randomIntGate} = 4:
+    give {4item} to {_p}
+  if {randomIntGate} = 5:
+    give {5item} to {_p}
+  if {randomIntGate} = 6:
+    give {5item} to {_p} 
+
+
+
+
+
+
+
+
+
+
+on break:
+    if block is location({Prizex},{Prizey},{Prizez}):
+        gatePrizes(player)
+        gateclose()
+
+
+
+
+
+
+
+
+
+
+
+
+
+on load:
+    delete {bsbsx}
+    delete {bsbsy}
+    delete {bsbsz}
+    delete {bsbs2x}
+    delete {bsbs2y}
+    delete {bsbs2z}
